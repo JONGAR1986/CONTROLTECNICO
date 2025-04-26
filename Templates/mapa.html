@@ -3,35 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ubicaciones en el Mapa</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
-    <style>
-        #map {
-            height: 500px;
-            width: 100%;
-        }
-    </style>
+    <title>Mapa de Ubicaciones</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
-    <h1>Ubicaciones en el Mapa</h1>
-    <div id="map"></div>
-    
-    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-    <script>
-        var map = L.map('map').setView([14.5592618, -90.5148562], 13); // Punto inicial en la ubicación de prueba
+    <h1>Mapa de Ubicaciones</h1>
+    <div id="map" style="height: 500px;"></div>
 
-        // Cargar mapa de OpenStreetMap
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([14.5592277, -90.5148745], 13); // Coordenadas iniciales
+
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
-        // Iterar sobre las ubicaciones y añadir marcadores
-        {% for ubicacion in ubicaciones %}
-            var lat = {{ ubicacion['lat'] }};
-            var lon = {{ ubicacion['lon'] }};
-            L.marker([lat, lon]).addTo(map)
-                .bindPopup("<b>Ubicación:</b><br>Lat: " + lat + "<br>Lon: " + lon);
-        {% endfor %}
+        // Obtener las ubicaciones desde el servidor
+        fetch('/ver')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(location => {
+                    var lat = location.lat;
+                    var lon = location.lon;
+                    L.marker([lat, lon]).addTo(map)
+                        .bindPopup("Lat: " + lat + "<br>Lon: " + lon);
+                });
+            })
+            .catch(error => console.log('Error al cargar ubicaciones:', error));
     </script>
 </body>
 </html>

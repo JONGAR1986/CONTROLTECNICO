@@ -1,8 +1,9 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import os
 
 app = Flask(__name__)
 
+# Lista en memoria para guardar ubicaciones
 ubicaciones = []
 
 @app.route('/', methods=['GET'])
@@ -19,7 +20,10 @@ def recibir_ubicacion():
 def ver_ubicaciones():
     return jsonify(ubicaciones)
 
+@app.route('/mapa')
+def mostrar_mapa():
+    return render_template('mapa.html')
+
 if __name__ == '__main__':
-    # Usar el puerto de la variable de entorno PORT de Render
-    port = int(os.environ.get("PORT", 5000))  # Si no está configurado, usará el puerto 5000
+    port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
