@@ -1,5 +1,6 @@
-from flask import Flask, request, jsonify
+ffrom flask import Flask, request, jsonify
 from datetime import datetime
+import os  # Necesitamos importar os para obtener el puerto
 
 app = Flask(__name__)
 
@@ -20,3 +21,9 @@ def recibir_ubicacion():
 @app.route('/ver', methods=['GET'])
 def ver_ubicaciones():
     return jsonify(ubicaciones)
+
+# Agrega esto para escuchar en el puerto dinámico de Render
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 5000))  # Obtiene el puerto dinámico
+    app.run(host="0.0.0.0", port=port)
+
