@@ -1,4 +1,4 @@
-ffrom flask import Flask, request, jsonify
+from flask import Flask, request, jsonify
 from datetime import datetime
 import os  # Necesitamos importar os para obtener el puerto
 
